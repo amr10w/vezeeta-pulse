@@ -1436,6 +1436,11 @@ setTimeout(animateBars, 300);
   const parents = ["","root","root","root","root","root","root","root","root","6Th Of October","6Th Of October","6Th Of October","6Th Of October","6Th Of October","6Th Of October","6Th Of October","6Th Of October","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","Dokki And Mohandessin","El-Maadi","El-Maadi","El-Maadi","El-Maadi","El-Maadi","El-Maadi","El-Maadi","El-Maadi","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","El-Sheikh Zayed","Faisal","Faisal","Faisal","Faisal","Faisal","Faisal","Faisal","Faisal","Heliopolis","Heliopolis","Heliopolis","Heliopolis","Heliopolis","Heliopolis","Heliopolis","Heliopolis","Nasr City","Nasr City","Nasr City","Nasr City","Nasr City","Nasr City","Nasr City","Nasr City","New Cairo","New Cairo","New Cairo","New Cairo","New Cairo","New Cairo","New Cairo","New Cairo"];
   const values  = [4270,717,601,664,469,531,499,393,396,37,72,80,55,76,68,31,112,76,45,75,44,53,53,21,102,58,43,43,32,67,50,33,67,45,61,70,50,76,56,39,102,31,68,43,50,44,50,27,83,79,65,73,60,91,70,83,80,58,91,62,62,109,66,99,117,74,67,93,80,111,91,55,146];
 
+  // Leaf nodes get their count for the gradient; root/area nodes get 0 (neutral light color)
+  const tileColors = ids.map((id, i) =>
+    (id === 'root' || parents[i] === 'root') ? 0 : values[i]
+  );
+
   const trace = {
     type: 'treemap',
     ids, labels, parents, values,
@@ -1443,20 +1448,26 @@ setTimeout(animateBars, 300);
     textinfo: 'label+value',
     hovertemplate: '<b>%{label}</b><br>Doctors: %{value}<extra></extra>',
     marker: {
-      colorscale: 'Blues',
+      colorscale: [
+        [0,   '#dbeafe'],
+        [0.2, '#93c5fd'],
+        [0.5, '#3b82f6'],
+        [0.8, '#1d4ed8'],
+        [1,   '#1e3a8a'],
+      ],
       autocolorscale: false,
-      colors: values,
-      cmin: 0,
+      colors: tileColors,
+      cmin: 21,
       cmax: 146,
       showscale: true,
-      colorbar: { thickness: 12, len: 0.6, title: { text: 'Doctors', side: 'right' } },
+      colorbar: { thickness: 12, len: 0.6, title: { text: 'Doctors', side: 'right' }, tickfont: { size: 11 } },
     },
     pathbar: { visible: true, thickness: 24 },
   };
 
   const layout = {
     margin: { l: 0, r: 60, t: 0, b: 0 },
-    paper_bgcolor: 'transparent',
+    paper_bgcolor: '#F8F9FF',
     font: { family: 'Plus Jakarta Sans, sans-serif', size: 12, color: '#0D1F33' },
   };
 
